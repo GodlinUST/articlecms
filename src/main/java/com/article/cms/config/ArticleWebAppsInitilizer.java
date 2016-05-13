@@ -16,6 +16,7 @@ public class ArticleWebAppsInitilizer implements WebApplicationInitializer {
 		ServletRegistration.Dynamic sr = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
 		sr.addMapping("/");
 		sr.setLoadOnStartup(0);
+		
 	}
 
 }
