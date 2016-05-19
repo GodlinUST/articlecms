@@ -12,8 +12,10 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -21,7 +23,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.article.cms")
 @EnableTransactionManagement
-public class ArticleConfiguration {
+public class ArticleConfiguration extends WebMvcConfigurerAdapter{
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -60,6 +62,14 @@ public class ArticleConfiguration {
 	}
 	
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		int cachePeriod = 31556926;
+        registry.addResourceHandler("/resources/css/**").addResourceLocations("/resources/css/").setCachePeriod(cachePeriod);
+        registry.addResourceHandler("/resources/js/**").addResourceLocations("/resources/js/").setCachePeriod(cachePeriod);
+        registry.addResourceHandler("/resources/img/**").addResourceLocations("/resources/img/").setCachePeriod(cachePeriod);
+    }
+	
+	@Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
     }
 }
