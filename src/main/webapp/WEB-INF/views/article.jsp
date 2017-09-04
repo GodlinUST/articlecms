@@ -9,6 +9,7 @@
 <title>Article Page</title>
  <script src="<c:url value='resources/js/tinymce/tinymce.min.js'/>" ></script>
 <link href="<c:url value='resources/css/Article.css' />" rel="stylesheet"></link>
+<link href="<c:url value='resources/css/pure-min.css' />" rel="stylesheet"></link>
 <script>
 tinymce.init({
 	  selector: 'textarea',
@@ -35,22 +36,42 @@ tinymce.init({
 </script>
 </head>
 <body>
-
+<table class="pure-table">
+<thead>
+        <tr>
+            <th>Serial</th>
+            <th>Title</th>
+            <th>Teaser</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            
+        </tr>
+    </thead><tbody>
 <c:forEach var="article" items="${listArticle}" varStatus="status">
-               
-                    <span class="title">${article.id}</span>
+        <tr>
+            <td>${article.id}</td>
+            <td><a target="blank" href="articledetails?articleid=${article.id}">${article.title}</a></td>
+            <td>${article.teaser}</td>
+            <td><a target="self" href="editarticle?articleid=${article.id}">Edit</a></td>
+            <td><a target="self" href="articledelete?articleid=${article.id}">delete</a></td>
+           
+        </tr>       
+    <%--                 <span class="title">${article.id}</span>
                     <span class="title"><a target="blank" href="articledetails?articleid=${article.id}">${article.title}</a></span>
-                    <span class="teaser">${article.teaser}</span>
+                    <span class="teaser">${article.teaser}</span> --%>
 <br/>                    
                     
 </c:forEach>
-
-<form method = "post" action = "addarticle">
-Article Title &nbsp;&nbsp;<input type = "text" name= "title" value=""/><br/>
-Article Teaser <input type = "text" name= "teaser" value=""/><br/>
-<textarea name= "body" ></textarea>
-
-<input type = "submit" value="Add Article"/>
+</table>
+<span class="title">Create a new Article</span><br/>
+<form class="pure-form pure-form-stacked" method = "post" action = "addarticle">
+Article Title &nbsp;&nbsp;<input type = "text" name= "title" value='${TitleArticle}'/><br/>
+Article Teaser <input type = "text" name= "teaser" value='${TeaserArticle}'/><br/>
+Article Resources <input type = "text" cols="400" rows="50" style="width:400px; height:50px;" name= "Resources" value='${ResourcesArticle}'/><br/>
+Article Header <input type = "text" cols="400" rows="50" style="width:400px; height:50px;" name= "Header" value='${HeaderArticle}'/><br/>
+Article Body <textarea name= "body" value='${BodyArticle}'></textarea><br/>
+Article Footer <input type = "text" cols="400" rows="50" style="width:400px; height:50px;" name= "footer" value='${FooterArticle}'/><br/>
+<input type = "submit" class="pure-button pure-button-primary" value="Add Article"/>
 </form>
 
 </body>

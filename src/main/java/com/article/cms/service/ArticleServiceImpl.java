@@ -37,8 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public boolean deleteArticle(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		return articleDao.deleteArticle(id);
 	}
 
 }

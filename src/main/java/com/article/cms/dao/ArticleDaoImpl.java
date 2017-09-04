@@ -35,7 +35,7 @@ public class ArticleDaoImpl extends AbstractDao<Integer, Article> implements Art
 	public boolean deleteArticle(int id) {
 		boolean t = false;
 		getArticle(id);
-		getSession().delete(getArticle(id));
+		getSession().delete(getArticle(id)); t = true;
 		return t;
 	}
 
