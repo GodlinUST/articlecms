@@ -36,6 +36,7 @@ tinymce.init({
 </script>
 </head>
 <body>
+<h2>welcome ${userID}</h2><h2><a target="self" href="logout">logout</a></h2> 
 <table class="pure-table">
 <thead>
         <tr>

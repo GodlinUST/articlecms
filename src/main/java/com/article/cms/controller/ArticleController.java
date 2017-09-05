@@ -7,6 +7,7 @@ import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -34,16 +35,22 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 	
-	@RequestMapping(value = {"/hallo"} , method = RequestMethod.GET)
+	@RequestMapping(value = {"/welcome"} , method = RequestMethod.GET)
 	public String sayWelcome(ModelMap map){
-		map.addAttribute("welcomemsg", "Welcome to Article");
+		map.addAttribute("welcomemsg", "Welcome to Article CMS");
 		return "index";
 	}
 	
 	@RequestMapping (value = {"/listarticle"}, method = RequestMethod.GET)
-	public ModelAndView findAllArticle(ModelAndView mv) {
+	public ModelAndView findAllArticle(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		if(null != session.getAttribute("user")){
+		mv.addObject("userID", session.getAttribute("user"));	
 		mv.addObject("listArticle", articleService.getAllArticle());
 		mv.setViewName("article");
+		}
+		else
+		{response.sendRedirect("/articlecms/welcome");}	
 		return mv;
 	}
 	
@@ -134,4 +141,32 @@ public class ArticleController {
 	            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 	            return (HtmlArticle) unmarshaller.unmarshal(xsr);
 	}
+	
+	
+	@RequestMapping (value = {"/login"}, method = RequestMethod.POST)
+	public void logincms(@RequestParam String userid,@RequestParam String pwd, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String user = null;
+		HttpSession session = request.getSession(true);
+		if(userid.equals("article") && pwd.equals("article"))
+		{
+		user = userid;
+		session.setAttribute("user", user);
+		response.sendRedirect("/articlecms/listarticle");
+		}
+		else
+		{
+		user = null;response.sendRedirect("/articlecms/welcome");
+		}	
+		}
+		
+	@RequestMapping (value = {"/logout"}, method = RequestMethod.GET)
+	public void logoutcms(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		if(null != session.getAttribute("user"))
+		{
+		session.invalidate();
+		response.sendRedirect("/articlecms/welcome");
+		}
+		
+		}
 }
